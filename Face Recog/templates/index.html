@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Emotion Detector</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1f2937; /* Dark background */
+        }
+        .form-container {
+            max-width: 90%;
+            width: 500px;
+        }
+        /* Custom styling for file input appearance */
+        .custom-file-input {
+            cursor: pointer;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 2px dashed #4b5563; /* Gray border */
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .custom-file-input:hover {
+            border-color: #60a5fa; /* Blue hover effect */
+            background-color: #374151;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Face Emotion Detector</h1>
+        <p>Upload your photo to detect your emotion using AI.</p>
+    </header>
+
+    <main>
+        <section>
+            <form id="emotion-form" action="/predict" method="POST" enctype="multipart/form-data" class="space-y-6">
+                
+                <!-- Name Input -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Your Name</label>
+                    <input type="text" name="name" id="name" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-white shadow-sm" placeholder="e.g., Jane Doe">
+                </div>
+
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                    <input type="email" name="email" id="email" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-white shadow-sm" placeholder="e.g., jane@example.com">
+                </div>
+
+                <!-- Image File Input -->
+                <div>
+                    <label for="image" class="block text-sm font-medium text-gray-300 mb-1">Upload Face Image</label>
+                    <label for="image" class="custom-file-input block">
+                        <span id="file-name" class="text-gray-400">Choose a file...</span>
+                        <span class="block text-xs mt-1 text-gray-500">JPG or PNG. Max 16MB.</span>
+                    </label>
+                    <input type="file" name="image" id="image" accept="image/*" required class="hidden" onchange="updateFileName(this)">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-button" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-800 transition duration-150 ease-in-out">
+                    Analyze My Emotion
+                </button>
+            </form>
+        </section>
+
+        {% if emotion %}
+        <section>
+            <h2>Detection Result</h2>
+            <p>{{ name }}, your detected emotion is: <strong>{{ emotion }}</strong></p>
+            {% if image_file %}
+            <figure>
+                <img src="{{ url_for('static', filename='uploads/' + image_file) }}" alt="Uploaded Image" width="200">
+                <figcaption>Uploaded Image</figcaption>
+            </figure>
+            {% endif %}
+        </section>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Face Emotion Detector</p>
+    </footer>
+
+</body>
+</html>
